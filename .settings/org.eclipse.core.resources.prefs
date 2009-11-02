@@ -1,0 +1,7 @@
+#Tue Nov 03 00:13:01 CET 2009
+eclipse.preferences.version=1
+encoding//src/main/java/org/efaps/maven_efaps_jetty/JettyRunMojo.java=UTF-8
+encoding//src/main/java/org/efaps/maven_efaps_jetty/configuration/AbstractDefinition.java=UTF-8
+encoding//src/main/java/org/efaps/maven_efaps_jetty/configuration/FilterDefinition.java=UTF-8
+encoding//src/main/java/org/efaps/maven_efaps_jetty/configuration/ServerDefinition.java=UTF-8
+encoding//src/main/java/org/efaps/maven_efaps_jetty/configuration/ServletDefinition.java=UTF-8
