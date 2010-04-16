@@ -98,11 +98,34 @@
     <issueManagement>
         <url>http://code.google.com/p/efaps/issues/list</url>
     </issueManagement>
+
+    <!-- SubVersion Repository -->
     <scm>
-        <connection>scm:svn:http://efaps.googlecode.com/svn/maven-efaps-jetty/trunk/</connection>
-        <developerConnection>scm:svn:https://developername@efaps.googlecode.com/svn/maven-efaps-jetty/trunk/</developerConnection>
-        <url>http://efaps.googlecode.com/svn/maven-efaps-jetty/trunk/</url>
+        <connection>scm:svn:http://efaps.googlecode.com/svn/eFaps-Kernel</connection>
+        <developerConnection>scm:svn:https://efaps.googlecode.com/svn/eFaps-Kernel</developerConnection>
+        <url>http://efaps.googlecode.com/svn/eFaps-Kernel</url>
     </scm>
+
+    <!-- Distribution Repository -->
+    <distributionManagement>
+        <site>
+            <id>efaps</id>
+            <name>Maven eFaps Jetty Plug-In Site</name>
+            <url>svn:https://eFaps.googlecode.com/svn/site/eFaps-Jetty-Plugin</url>
+        </site>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>efaps</id>
+            <name>eFaps Repository Released</name>
+            <url>svn:https://efaps.googlecode.com/svn/repo/released</url>
+        </repository>
+        <snapshotRepository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>efaps</id>
+            <name>eFaps Repository Snapshot</name>
+            <url>svn:https://efaps.googlecode.com/svn/repo/snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <!-- Reporting -->
     <reporting>
