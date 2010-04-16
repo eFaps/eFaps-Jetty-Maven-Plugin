@@ -39,7 +39,7 @@
     <!-- ***********************************************************************
     * Module Definition
     ************************************************************************ -->
-    <groupId>org.efaps.maven</groupId>
+    <groupId>org.efaps</groupId>
     <packaging>maven-plugin</packaging>
     <artifactId>maven-efaps-jetty</artifactId>
     <version>1.0-${jettyVersion}</version>
