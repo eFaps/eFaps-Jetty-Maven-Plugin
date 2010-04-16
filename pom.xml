@@ -42,7 +42,7 @@
     <groupId>org.efaps.maven</groupId>
     <packaging>maven-plugin</packaging>
     <artifactId>maven-efaps-jetty</artifactId>
-    <version>1.0-${jettyVersion}-SNAPSHOT</version>
+    <version>1.0-${jettyVersion}</version>
 
     <name>maven-efaps-jetty</name>
 
@@ -236,6 +236,13 @@
                 </executions>
             </plugin>
         </plugins>
+         <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.9</version>
+            </extension>
+        </extensions>
     </build>
 
     <!--  Profile for a release: Only in this case the source and JavaDoc will be attached -->
