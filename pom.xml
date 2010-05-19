@@ -42,7 +42,7 @@
     <groupId>org.efaps</groupId>
     <packaging>maven-plugin</packaging>
     <artifactId>maven-efaps-jetty</artifactId>
-    <version>1.0-${jettyVersion}-SNAPSHOT</version>
+    <version>1.0.1-${jettyVersion}-SNAPSHOT</version>
 
     <name>maven-efaps-jetty</name>
 
@@ -334,21 +334,21 @@
         <dependency>
             <groupId>org.efaps</groupId>
             <artifactId>maven-java5</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
 
         <!-- eFaps Maven Logger -->
         <dependency>
             <groupId>org.efaps</groupId>
             <artifactId>maven-slf4jlogger</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- eFaps kernel -->
         <dependency>
             <groupId>org.efaps</groupId>
             <artifactId>efaps-kernel</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.4-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
