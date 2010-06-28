@@ -99,9 +99,9 @@
 
     <!-- SubVersion Repository -->
     <scm>
-        <connection>scm:svn:http://efaps.googlecode.com/svn/maven-efaps-jetty/tags/V1.0.2-7.0.1.v20091125</connection>
-        <developerConnection>scm:svn:https://efaps.googlecode.com/svnmaven-efaps-jetty/tags/V1.0.2-7.0.1.v20091125</developerConnection>
-        <url>http://efaps.googlecode.com/svn/maven-efaps-jetty/tags/V1.0.2-7.0.1.v20091125</url>
+        <connection>scm:svn:http://efaps.googlecode.com/svn/maven-efaps-jetty/tags/V1.0.2-7.0.1.v20091125:</connection>
+        <developerConnection>scm:svn:https://efaps.googlecode.com/svn/maven-efaps-jetty/tags/V1.0.2-7.0.1.v20091125:</developerConnection>
+        <url>http://efaps.googlecode.com/svn/maven-efaps-jetty/tags/V1.0.2-7.0.1.v20091125:</url>
     </scm>
 
     <!-- Distribution Repository -->
