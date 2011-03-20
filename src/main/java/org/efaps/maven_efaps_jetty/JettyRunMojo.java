@@ -32,10 +32,11 @@ import org.efaps.init.StartupDatabaseConnection;
 import org.efaps.init.StartupException;
 import org.efaps.maven.logger.SLF4JOverMavenLog;
 import org.efaps.maven_efaps_jetty.configuration.ServerDefinition;
-import org.efaps.maven_java5.org.apache.maven.tools.plugin.Execute;
-import org.efaps.maven_java5.org.apache.maven.tools.plugin.Goal;
-import org.efaps.maven_java5.org.apache.maven.tools.plugin.Parameter;
-import org.efaps.maven_java5.org.apache.maven.tools.plugin.lifecycle.Phase;
+import org.jfrog.maven.annomojo.annotations.MojoGoal;
+import org.jfrog.maven.annomojo.annotations.MojoParameter;
+import org.jfrog.maven.annomojo.annotations.MojoPhase;
+import org.jfrog.maven.annomojo.annotations.MojoRequiresDependencyResolution;
+import org.jfrog.maven.annomojo.annotations.MojoRequiresDirectInvocation;
 
 /**
  * The goal starts the Jetty web server.
@@ -44,10 +45,10 @@ import org.efaps.maven_java5.org.apache.maven.tools.plugin.lifecycle.Phase;
  * @version $Id$
  * @todo description
  */
-@Goal(name = "run",
-      requiresDependencyResolutionScope = "compile",
-      requiresDirectInvocation = true)
-@Execute(phase = Phase.INSTALL)
+@MojoGoal(value = "run")
+@MojoRequiresDirectInvocation(value = true)
+@MojoPhase(value = "install")
+@MojoRequiresDependencyResolution(value = "compile")
 public class JettyRunMojo
     implements Mojo
 {
@@ -55,26 +56,26 @@ public class JettyRunMojo
      * Defines the Port on which the Jetty is started. Default value is
      * <i>8888</i>.
      */
-    @Parameter(defaultValue = "8888")
+    @MojoParameter(defaultValue = "8888")
     private int port;
 
     /**
      * Defines the Host (Adapter) on which the jetty is started. Default value
      * is <i>localhost</i>.
      */
-    @Parameter(defaultValue = "127.0.0.1")
+    @MojoParameter(defaultValue = "127.0.0.1")
     private String host;
 
     /**
      *
      */
-    @Parameter(required = true)
+    @MojoParameter(required = true)
     private String jaasConfigFile;
 
     /**
      *
      */
-    @Parameter(required = true)
+    @MojoParameter(required = true)
     private String configFile;
 
     /**
@@ -84,40 +85,35 @@ public class JettyRunMojo
      * @see javax.sql.DataSource
      * @see #initDatabase
      */
-    @Parameter(required = true,
-               expression = "${org.efaps.db.factory}")
+    @MojoParameter(required = true, expression = "${org.efaps.db.factory}")
     private String factory;
 
     /**
      * Holds all properties of the connection to the database. The properties
      * are separated by a comma.
      */
-    @Parameter(expression = "${org.efaps.db.connection}",
-               required = true)
+    @MojoParameter(expression = "${org.efaps.db.connection}", required = true)
     private String connection;
 
     /**
      * Defines the database type (used to define database specific
      * implementations).
      */
-    @Parameter(expression = "${org.efaps.db.type}",
-               required = true)
+    @MojoParameter(expression = "${org.efaps.db.type}", required = true)
     private String type;
 
 
     /**
      * Value for the timeout of the transaction.
      */
-    @Parameter(expression = "${org.efaps.transaction.timeout}",
-               required = false)
+    @MojoParameter(expression = "${org.efaps.transaction.timeout}", required = false)
     private String transactionTimeout;
 
     /**
      * Name of the class for the transaction manager.
      */
-    @Parameter(expression = "${org.efaps.transaction.manager}",
-               defaultValue = "org.objectweb.jotm.Current",
-               required = true)
+    @MojoParameter(expression = "${org.efaps.transaction.manager}", defaultValue = "org.objectweb.jotm.Current",
+                    required = true)
     private String transactionManager;
 
 
@@ -137,7 +133,7 @@ public class JettyRunMojo
     public void execute()
         throws MojoExecutionException
     {
-        this.init();
+        init();
 
         final Server server = new Server();
 
@@ -163,9 +159,9 @@ public class JettyRunMojo
         serverDef.updateServer(handler);
 
         try {
-            this.getLog().info("Starting Server");
+            getLog().info("Starting Server");
             server.start();
-            this.getLog().info("Server Started");
+            getLog().info("Server Started");
             server.join();
         } catch (final Exception e) {
             throw new MojoExecutionException("Could not Start Jetty Server", e);
@@ -183,9 +179,9 @@ public class JettyRunMojo
     {
         try  {
             Class.forName("org.efaps.maven.logger.SLF4JOverMavenLog");
-            SLF4JOverMavenLog.LOGGER = this.getLog();
+            SLF4JOverMavenLog.LOGGER = getLog();
         } catch (final ClassNotFoundException e)  {
-            this.getLog().error("could not initialize SLF4J over maven logger");
+            getLog().error("could not initialize SLF4J over maven logger");
         }
 
         try {
@@ -197,7 +193,7 @@ public class JettyRunMojo
                                                   ? null
                                                   : Integer.parseInt(this.transactionTimeout));
         } catch (final StartupException e) {
-            this.getLog().error("Initialize Database Connection failed: " + e.toString());
+            getLog().error("Initialize Database Connection failed: " + e.toString());
         }
     }
 

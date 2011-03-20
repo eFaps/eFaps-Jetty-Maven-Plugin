@@ -29,7 +29,7 @@
 
     <properties>
         <!-- Jetty Version, used also to build the plug-in version number -->
-        <jettyVersion>7.0.1.v20091125</jettyVersion>
+        <jettyVersion>7.1.6.v20100715</jettyVersion>
         <!-- correct encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -40,7 +40,7 @@
     <groupId>org.efaps</groupId>
     <packaging>maven-plugin</packaging>
     <artifactId>maven-efaps-jetty</artifactId>
-    <version>1.0.3-7.0.1.v20091125-SNAPSHOT</version>
+    <version>1.0.2-7.0.1.v20091125</version>
 
     <name>maven-efaps-jetty</name>
 
@@ -129,6 +129,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.3.1</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -147,6 +148,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
                 <configuration>
                     <use>false</use>
                     <show>private</show>
@@ -186,6 +188,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jxr-maven-plugin</artifactId>
+                <version>2.0-beta-1</version>
                 <configuration>
                     <linkJavadoc>true</linkJavadoc>
                     <javadocDir>../apidocs</javadocDir>
@@ -195,6 +198,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
+                <version>2.5</version>
                 <configuration>
                     <linkXref>true</linkXref>
                     <sourceEncoding>utf-8</sourceEncoding>
@@ -205,6 +209,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.3.1</version>
             </plugin>
         </plugins>
     </reporting>
@@ -220,6 +225,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -227,34 +233,55 @@
                 </configuration>
             </plugin>
 
-            <plugin>
+           <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
+                <version>2.7</version>
                 <dependencies>
-                    <!-- used to get annotations within Java source code -->
                     <dependency>
-                        <groupId>org.efaps</groupId>
-                        <artifactId>maven-java5</artifactId>
-                        <version>1.0.0</version>
+                        <groupId>org.jfrog.maven.annomojo</groupId>
+                        <artifactId>maven-plugin-tools-anno</artifactId>
+                        <version>1.4.0</version>
                         <scope>runtime</scope>
+                        <!-- The com.sun:tools dependency is a system scope dependency, which does not work
+                            on Mac OS due to a wrong system path. (it is already included in the standart JVM path).
+                            Therefor it is excluded. If necessary it can be included by using the profile
+                            "default-tools.jar".
+                        -->
+                        <exclusions>
+                            <exclusion>
+                            <groupId>com.sun</groupId>
+                            <artifactId>tools</artifactId>
+                            </exclusion>
+                        </exclusions>
                     </dependency>
                 </dependencies>
-                <executions>
-                    <execution>
-                        <!--
-                            due to Java5 annotations, which can only be read after
-                             compilation, the maven-plugin-plugin must be executed
-                             a second time after compilation
-                        -->
-                        <id>extract-after-copmile</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>descriptor</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
-        </plugins>
+            <!--
+                Must defined here to use checkstyle version 5
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-release-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <mavenExecutorId>forked-path</mavenExecutorId>
+                </configuration>
+            </plugin>
+    </plugins>
+        <!-- Needed for the upload of the site -->
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.9</version>
+            </extension>
+        </extensions>
     </build>
 
     <!--  Profile for a release: Only in this case the source and JavaDoc will be attached -->
@@ -273,6 +300,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
+                        <version>2.1.2</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -301,6 +329,7 @@
                         <inherited>true</inherited>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.5</version>
                         <configuration>
                             <updateReleaseInfo>true</updateReleaseInfo>
                         </configuration>
@@ -309,6 +338,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.1</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -329,10 +359,10 @@
     ************************************************************************ -->
     <dependencies>
         <!-- annotations used to identify maven plugin syntax -->
-        <dependency>
-            <groupId>org.efaps</groupId>
-            <artifactId>maven-java5</artifactId>
-            <version>1.0.2</version>
+       <dependency>
+            <groupId>org.jfrog.maven.annomojo</groupId>
+            <artifactId>maven-plugin-anno</artifactId>
+            <version>1.4.0</version>
         </dependency>
 
         <!-- eFaps Maven Logger -->
@@ -346,7 +376,7 @@
         <dependency>
             <groupId>org.efaps</groupId>
             <artifactId>efaps-kernel</artifactId>
-            <version>1.2.3</version>
+            <version>1.12.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -385,7 +415,7 @@
         <dependency>
             <groupId>org.ow2.spec.ee</groupId>
             <artifactId>ow2-connector-1.5-spec</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.6</version>
         </dependency>
         <!-- Needed indirectly for the transaction manager -->
         <dependency>
