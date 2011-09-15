@@ -376,8 +376,7 @@
         <dependency>
             <groupId>org.efaps</groupId>
             <artifactId>efaps-kernel</artifactId>
-            <version>LATEST</version>
-            <scope>1.18.0</scope>
+            <version>[1.18.0,)</version>
         </dependency>
 
         <!--  to compile the jetty goals -->
