@@ -29,7 +29,8 @@
 
     <properties>
         <!-- Jetty Version, used also to build the plug-in version number -->
-        <jettyVersion>7.5.4.v20111024</jettyVersion>
+        <jettyVersion>8.1.2.v20120308</jettyVersion>
+        <kernelVersion>[2.0.0-SNAPSHOT,2.1.0)</kernelVersion>
         <!-- correct encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -37,13 +38,16 @@
     <!-- ***********************************************************************
     * Module Definition
     ************************************************************************ -->
-    <groupId>org.efaps</groupId>
     <packaging>maven-plugin</packaging>
-    <artifactId>maven-efaps-jetty</artifactId>
-    <version>1.19.1-7.5.4.v20111024-SNAPSHOT</version>
+    <groupId>org.efaps</groupId>
+    <artifactId>efaps-maven-jetty</artifactId>
+    <version>3.0.0-8.1.2.v20120308-SNAPSHOT</version>
 
-    <name>maven-efaps-jetty</name>
+    <name>eFaps Maven Jetty-plugin</name>
 
+    <prerequisites>
+        <maven>3.0</maven>
+    </prerequisites>
     <!-- Project Information -->
     <description>
         Maven plugin to start Jetty as application server for eFaps.
@@ -148,7 +152,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.8</version>
+                <version>2.8.1</version>
                 <configuration>
                     <use>false</use>
                     <show>private</show>
@@ -198,7 +202,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>2.6</version>
+                <version>2.7.1</version>
                 <configuration>
                     <linkXref>true</linkXref>
                     <sourceEncoding>utf-8</sourceEncoding>
@@ -209,7 +213,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.3.3</version>
+                <version>2.4.0</version>
             </plugin>
         </plugins>
     </reporting>
@@ -263,12 +267,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.8</version>
+                <version> 2.9.1</version>
             </plugin>
              <plugin>
                  <groupId>org.apache.maven.plugins</groupId>
                  <artifactId>maven-release-plugin</artifactId>
-                <version>2.2.1</version>
+                <version>2.2.2</version>
                 <configuration>
                     <mavenExecutorId>forked-path</mavenExecutorId>
                 </configuration>
@@ -315,6 +319,7 @@
                         <inherited>true</inherited>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.8.1</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -376,13 +381,13 @@
         <dependency>
             <groupId>org.efaps</groupId>
             <artifactId>efaps-kernel</artifactId>
-            <version>[1.19.0,)</version>
+            <version>${kernelVersion}</version>
         </dependency>
 
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-servlet</artifactId>
-            <version>1.11</version>
+            <version>1.12</version>
         </dependency>
 
         <!--  to compile the jetty goals -->
@@ -420,7 +425,7 @@
         <dependency>
             <groupId>org.ow2.spec.ee</groupId>
             <artifactId>ow2-connector-1.5-spec</artifactId>
-            <version>1.0.10</version>
+            <version>1.0.11</version>
         </dependency>
         <!-- Needed indirectly for the transaction manager -->
         <dependency>

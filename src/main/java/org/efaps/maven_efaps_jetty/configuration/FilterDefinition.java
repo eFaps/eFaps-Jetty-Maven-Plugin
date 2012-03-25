@@ -20,6 +20,10 @@
 
 package org.efaps.maven_efaps_jetty.configuration;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
@@ -31,9 +35,10 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 public class FilterDefinition
     extends AbstractDefinition
 {
+
     /**
      *
-     * @param _handler  servlet context handler
+     * @param _handler servlet context handler
      */
     public void updateServer(final ServletContextHandler _handler)
     {
@@ -41,6 +46,6 @@ public class FilterDefinition
         filter.setName(getName());
         filter.setClassName(getClassName());
         filter.setInitParameters(getIniParams());
-        _handler.addFilter(filter, getPathSpec(), 1);
+        _handler.addFilter(filter, getPathSpec(), EnumSet.of(DispatcherType.REQUEST));
     }
 }
