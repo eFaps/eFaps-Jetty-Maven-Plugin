@@ -40,7 +40,7 @@
     ************************************************************************ -->
     <packaging>maven-plugin</packaging>
     <groupId>org.efaps</groupId>
-    <artifactId>efaps-maven-jetty</artifactId>
+    <artifactId>efaps-jetty-maven-plugin</artifactId>
     <version>2.0.0-8.1.2.v20120308-SNAPSHOT</version>
 
     <name>eFaps Maven Jetty-plugin</name>
