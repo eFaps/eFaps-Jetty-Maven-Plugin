@@ -30,7 +30,7 @@
     <properties>
         <!-- Jetty Version, used also to build the plug-in version number -->
         <jettyVersion>8.1.2.v20120308</jettyVersion>
-        <kernelVersion>[2.0.0-SNAPSHOT,2.1.0)</kernelVersion>
+        <webappVersion>[2.0.0-SNAPSHOT,2.1.0)</webappVersion>
         <!-- correct encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -277,7 +277,7 @@
                     <mavenExecutorId>forked-path</mavenExecutorId>
                 </configuration>
             </plugin>
-    </plugins>
+        </plugins>
         <!-- Needed for the upload of the site -->
         <extensions>
             <extension>
@@ -377,11 +377,10 @@
             <version>1.0.1</version>
         </dependency>
 
-        <!-- eFaps kernel [1.19.0,)-->
         <dependency>
             <groupId>org.efaps</groupId>
-            <artifactId>efaps-kernel</artifactId>
-            <version>${kernelVersion}</version>
+            <artifactId>efaps-webapp</artifactId>
+            <version>${webappVersion}</version>
         </dependency>
 
         <dependency>
@@ -395,7 +394,6 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
             <version>${jettyVersion}</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- Javax Naming implementation -->
