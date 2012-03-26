@@ -20,6 +20,11 @@
 
 package org.efaps.maven_efaps_jetty;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -102,12 +107,11 @@ public class JettyRunMojo
     @MojoParameter(expression = "${org.efaps.db.type}", required = true)
     private String type;
 
-
     /**
      * Value for the timeout of the transaction.
      */
-    @MojoParameter(expression = "${org.efaps.transaction.timeout}", required = false)
-    private String transactionTimeout;
+    @MojoParameter(expression = "${org.efaps.configuration.properties}", required = false)
+    private String configProps;
 
     /**
      * Name of the class for the transaction manager.
@@ -189,9 +193,7 @@ public class JettyRunMojo
                                               this.factory,
                                               this.connection,
                                               this.transactionManager,
-                                              this.transactionTimeout == null
-                                                  ? null
-                                                  : Integer.parseInt(this.transactionTimeout));
+                                              convertToMap(this.configProps));
         } catch (final StartupException e) {
             getLog().error("Initialize Database Connection failed: " + e.toString());
         }
@@ -221,4 +223,36 @@ public class JettyRunMojo
     {
         return this.log;
     }
+
+    /**
+    * Separates all key / value pairs of given text string.<br/>
+    * Evaluation algorithm:<br/>
+    * Separates the text by all found commas (only if in front of the comma is
+    * no back slash). This are the key / value pairs. A key / value pair is
+    * separated by the first equal ('=') sign.
+    *
+    * @param _text text string to convert to a key / value map
+    * @return Map of strings with all found key / value pairs
+    */
+   protected Map<String, String> convertToMap(final String _text)
+   {
+       final Map<String, String> properties = new HashMap<String, String>();
+
+       // separated all key / value pairs
+       final Pattern pattern = Pattern.compile("(([^\\\\,])|(\\\\,)|(\\\\))*");
+       final Matcher matcher = pattern.matcher(_text);
+
+       while (matcher.find()) {
+           final String group = matcher.group().trim();
+           if (group.length() > 0) {
+               // separated key from value
+               final int index = group.indexOf('=');
+               final String key = (index > 0) ? group.substring(0, index).trim() : group.trim();
+               final String value = (index > 0) ? group.substring(index + 1).trim() : "";
+               properties.put(key, value);
+           }
+       }
+       return properties;
+   }
+
 }
