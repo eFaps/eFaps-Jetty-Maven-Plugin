@@ -403,6 +403,13 @@
             <version>${jettyVersion}</version>
         </dependency>
 
+        <!-- Jetty plus configuration neede to use JNDI complettely -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-plus</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
+
         <!-- java transaction manager -->
         <dependency>
             <groupId>jotm</groupId>
