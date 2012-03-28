@@ -20,6 +20,9 @@
 
 package org.efaps.maven_efaps_jetty;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -28,11 +31,13 @@ import java.util.regex.Pattern;
 import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.eclipse.jetty.plus.webapp.EnvConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.efaps.init.StartupDatabaseConnection;
 import org.efaps.init.StartupException;
 import org.efaps.maven.logger.SLF4JOverMavenLog;
@@ -42,6 +47,7 @@ import org.jfrog.maven.annomojo.annotations.MojoParameter;
 import org.jfrog.maven.annomojo.annotations.MojoPhase;
 import org.jfrog.maven.annomojo.annotations.MojoRequiresDependencyResolution;
 import org.jfrog.maven.annomojo.annotations.MojoRequiresDirectInvocation;
+import org.xml.sax.SAXException;
 
 /**
  * The goal starts the Jetty web server.
@@ -83,6 +89,13 @@ public class JettyRunMojo
     @MojoParameter(required = true)
     private String configFile;
 
+
+    /**
+     * Name of the class for the transaction manager.
+     */
+    @MojoParameter()
+    private String envFile;
+
     /**
      * Class name of the SQL database factory (implementing interface
      * {@link #javax.sql.DataSource}).
@@ -113,6 +126,7 @@ public class JettyRunMojo
     @MojoParameter(expression = "${org.efaps.configuration.properties}", required = false)
     private String configProps;
 
+
     /**
      * Name of the class for the transaction manager.
      */
@@ -141,6 +155,24 @@ public class JettyRunMojo
 
         final Server server = new Server();
 
+        try {
+            final File file = new File(this.envFile);
+            if (file.exists()) {
+                final EnvConfiguration envConfiguration = new EnvConfiguration();
+                envConfiguration.setJettyEnvXml(file.toURI().toURL());
+                final WebAppContext webcontext = new WebAppContext();
+                envConfiguration.configure(webcontext);
+            }
+        } catch (final MalformedURLException e) {
+            throw new MojoExecutionException("Could not read the Jetty env", e);
+        } catch (final SAXException e) {
+            throw new MojoExecutionException("Could not read the Jetty env", e);
+        } catch (final IOException e) {
+            throw new MojoExecutionException("Could not read the Jetty env", e);
+        } catch (final Exception e) {
+            throw new MojoExecutionException("Could not read the Jetty env", e);
+        }
+
         getLog().info("Starting jetty Version "
                       + server.getClass().getPackage().getImplementationVersion());
 
@@ -154,7 +186,7 @@ public class JettyRunMojo
 
         System.setProperty("java.security.auth.login.config",
                            this.jaasConfigFile);
-
+        new WebAppContext();
         final ServletContextHandler handler = new ServletContextHandler(contexts,
                                                                         "/eFaps",
                                                                         ServletContextHandler.SESSIONS);
