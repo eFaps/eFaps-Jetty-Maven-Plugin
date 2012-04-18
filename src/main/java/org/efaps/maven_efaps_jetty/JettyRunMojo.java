@@ -156,12 +156,14 @@ public class JettyRunMojo
         final Server server = new Server();
 
         try {
-            final File file = new File(this.envFile);
-            if (file.exists()) {
-                final EnvConfiguration envConfiguration = new EnvConfiguration();
-                envConfiguration.setJettyEnvXml(file.toURI().toURL());
-                final WebAppContext webcontext = new WebAppContext();
-                envConfiguration.configure(webcontext);
+            if (this.envFile != null) {
+                final File file = new File(this.envFile);
+                if (file.exists()) {
+                    final EnvConfiguration envConfiguration = new EnvConfiguration();
+                    envConfiguration.setJettyEnvXml(file.toURI().toURL());
+                    final WebAppContext webcontext = new WebAppContext();
+                    envConfiguration.configure(webcontext);
+                }
             }
         } catch (final MalformedURLException e) {
             throw new MojoExecutionException("Could not read the Jetty env", e);
