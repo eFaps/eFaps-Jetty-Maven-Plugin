@@ -181,6 +181,7 @@ public class JettyRunMojo
         final Connector connector = new SelectChannelConnector();
         connector.setPort(this.port);
         connector.setHost(this.host);
+        connector.setRequestHeaderSize(32768);
         server.addConnector(connector);
 
         final ContextHandlerCollection contexts = new ContextHandlerCollection();
