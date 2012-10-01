@@ -30,7 +30,8 @@
     <properties>
         <!-- Jetty Version, used also to build the plug-in version number -->
         <jettyVersion>8.1.4.v20120524</jettyVersion>
-        <webappVersion>[2.0.0-SNAPSHOT,2.1.0)</webappVersion>
+        <webappVersion>[2.1.0-SNAPSHOT,2.2.0)</webappVersion>
+        <mobileVersion>[2.0.1-SNAPSHOT,2.1.0)</mobileVersion>
         <!-- correct encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -381,6 +382,12 @@
             <groupId>org.efaps</groupId>
             <artifactId>efaps-webapp</artifactId>
             <version>${webappVersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.efaps</groupId>
+            <artifactId>efaps-mobile</artifactId>
+            <version>${mobileVersion}</version>
         </dependency>
 
         <dependency>
