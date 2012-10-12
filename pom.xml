@@ -393,7 +393,7 @@
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-servlet</artifactId>
-            <version>1.12</version>
+            <version>1.14</version>
         </dependency>
 
         <!--  to compile the jetty goals -->
