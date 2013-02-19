@@ -2,7 +2,7 @@
 
 <!--
 
- Copyright 2003 - 2012 The eFaps Team
+ Copyright 2003 - 2013 The eFaps Team
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -29,8 +29,8 @@
 
     <properties>
         <!-- Jetty Version, used also to build the plug-in version number -->
-        <jettyVersion>8.1.8.v20121106</jettyVersion>
-        <webappVersion>[2.2.0-SNAPSHOT,2.3.0)</webappVersion>
+        <jettyVersion>8.1.9.v20130131</jettyVersion>
+        <webappVersion>[3.0.0-SNAPSHOT,3.1.0)</webappVersion>
         <mobileVersion>[2.2.0-SNAPSHOT,2.3.0)</mobileVersion>
         <!-- correct encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,7 +42,7 @@
     <packaging>maven-plugin</packaging>
     <groupId>org.efaps</groupId>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
-    <version>2.2.1-8.1.8.v20121106-SNAPSHOT</version>
+    <version>3.0.0-8.1.9.v20130131-SNAPSHOT</version>
 
     <name>eFaps Maven Jetty-plugin</name>
 
@@ -128,105 +128,36 @@
         </repository>
     </distributionManagement>
 
-    <!-- Reporting -->
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.4</version>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>index</report>
-                            <report>summary</report>
-                            <report>dependencies</report>
-                            <report>project-team</report>
-                            <report>issue-tracking</report>
-                            <report>license</report>
-                            <report>scm</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-            <!-- JavaDoc -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.8.1</version>
-                <configuration>
-                    <use>false</use>
-                    <show>private</show>
-                    <source>1.5</source>
-                    <doctitle>&lt;h1&gt;Maven eFaps Jetty Plug-In V${project.version}&lt;/h1&gt;</doctitle>
-                    <windowtitle>Maven eFaps Jetty Plug-In V${project.version} </windowtitle>
-                    <author />
-                    <bottom>
-                        &lt;i&gt;
-                        Copyright 2003-2009 The eFaps Team&lt;br/&gt;
-                        &lt;br/&gt;
-                        Licensed under the Apache License, Version 2.0 (the "License")
-                        you may not use this file except in compliance with the License.
-                        You may obtain a copy of the License at
-                          &lt;a href="http://www.apache.org/licenses/LICENSE-2.0"&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/a&gt;.&lt;br/&gt;
-                        Unless required by applicable law or agreed to in writing, software
-                        distributed under the License is distributed on an "AS IS" BASIS,
-                        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-                        See the License for the specific language governing permissions and
-                        limitations under the License.
-                        &lt;/i&gt;
-                    </bottom>
-                    <!-- linksource>true</linksource -->
-                    <links>
-                        <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
-                    </links>
-                    <tags>
-                        <tag>
-                            <name>todo</name>
-                            <placement>a</placement>
-                            <head>To do:</head>
-                        </tag>
-                    </tags>
-                </configuration>
-            </plugin>
-            <!-- source code -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jxr-maven-plugin</artifactId>
-                <version>2.0-beta-1</version>
-                <configuration>
-                    <linkJavadoc>true</linkJavadoc>
-                    <javadocDir>../apidocs</javadocDir>
-                </configuration>
-            </plugin>
-            <!-- PMD report -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>2.7.1</version>
-                <configuration>
-                    <linkXref>true</linkXref>
-                    <sourceEncoding>utf-8</sourceEncoding>
-                    <targetJdk>1.5</targetJdk>
-                </configuration>
-            </plugin>
-            <!--  findbugs report -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.4.0</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
-    <!-- ***********************************************************************
-    * Project itself
-    ************************************************************************ -->
     <build>
         <plugins>
-            <!--
-                Compiler Settings for Java 1.5 is needed!
-            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <goalPrefix>efaps-jetty</goalPrefix>
+                    <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>mojo-descriptor</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>descriptor</goal>
+                        </goals>
+                    </execution>
+                    <!-- if you want to generate help goal -->
+                    <execution>
+                        <id>help-goal</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>helpmojo</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Compiler Settings: - Java 1.6 is needed! - encoding UTF8 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -237,45 +168,93 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-
-           <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-plugin-plugin</artifactId>
-                <version>2.9</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.jfrog.maven.annomojo</groupId>
-                        <artifactId>maven-plugin-tools-anno</artifactId>
-                        <version>1.4.1</version>
-                        <scope>runtime</scope>
-                        <!-- The com.sun:tools dependency is a system scope dependency, which does not work
-                            on Mac OS due to a wrong system path. (it is already included in the standart JVM path).
-                            Therefor it is excluded. If necessary it can be included by using the profile
-                            "default-tools.jar".
-                        -->
-                        <exclusions>
-                            <exclusion>
-                            <groupId>com.sun</groupId>
-                            <artifactId>tools</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <!--
-                Must defined here to use checkstyle version 5
-            -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version> 2.9.1</version>
-            </plugin>
-             <plugin>
-                 <groupId>org.apache.maven.plugins</groupId>
-                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.2.2</version>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.4</version>
                 <configuration>
                     <mavenExecutorId>forked-path</mavenExecutorId>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <reportPlugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                            <reportSets>
+                                <reportSet>
+                                    <reports>
+                                        <report>index</report>
+                                        <report>summary</report>
+                                        <report>dependencies</report>
+                                        <report>project-team</report>
+                                        <!-- <report>mailing-list</report> -->
+                                        <!-- <report>cim</report> -->
+                                        <report>issue-tracking</report>
+                                        <report>license</report>
+                                        <report>scm</report>
+                                    </reports>
+                                </reportSet>
+                            </reportSets>
+                        </plugin>
+                        <!-- JavaCC reporting -->
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>javacc-maven-plugin</artifactId>
+                        </plugin>
+                        <!-- java doc -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>2.8.1</version>
+                            <configuration>
+                                <minmemory>128m</minmemory>
+                                <maxmemory>1g</maxmemory>
+                                <level>private</level>
+                                <detectLinks />
+                            </configuration>
+                        </plugin>
+                        <!-- source code -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-jxr-plugin</artifactId>
+                            <version>2.2</version>
+                            <configuration>
+                                <linkJavadoc>false</linkJavadoc>
+                                <javadocDir>apidocs</javadocDir>
+                            </configuration>
+                        </plugin>
+                        <!-- checkstyle -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-checkstyle-plugin</artifactId>
+                            <version>2.6</version>
+                            <configuration>
+                                <configLocation>${basedir}/src/checkstyle/efaps_checks.xml</configLocation>
+                            </configuration>
+                        </plugin>
+                        <!-- PMD report -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-pmd-plugin</artifactId>
+                            <version>2.5</version>
+                            <configuration>
+                                <linkXref>true</linkXref>
+                                <sourceEncoding>utf-8</sourceEncoding>
+                                <targetJdk>1.5</targetJdk>
+                            </configuration>
+                        </plugin>
+                        <!-- findbugs report -->
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>findbugs-maven-plugin</artifactId>
+                            <version>2.3.1</version>
+                            <configuration />
+                        </plugin>
+                    </reportPlugins>
                 </configuration>
             </plugin>
         </plugins>
@@ -284,7 +263,7 @@
             <extension>
                 <groupId>org.jvnet.wagon-svn</groupId>
                 <artifactId>wagon-svn</artifactId>
-                <version>1.9</version>
+                <version>1.11</version>
             </extension>
         </extensions>
     </build>
@@ -364,12 +343,21 @@
     * Dependencies
     ************************************************************************ -->
     <dependencies>
-        <!-- annotations used to identify maven plugin syntax -->
-       <dependency>
-            <groupId>org.jfrog.maven.annomojo</groupId>
-            <artifactId>maven-plugin-anno</artifactId>
-            <version>1.4.1</version>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.2</version>
+            <!-- annotations are not needed for plugin execution so you can
+                remove this dependency for execution with using provided scope -->
+            <scope>provided</scope>
         </dependency>
+        <!-- generated help mojo has a dependency to plexus-utils -->
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>3.0.10</version>
+        </dependency>
+
 
         <!-- eFaps Maven Logger -->
         <dependency>
@@ -437,7 +425,7 @@
         <dependency>
             <groupId>org.ow2.spec.ee</groupId>
             <artifactId>ow2-connector-1.5-spec</artifactId>
-            <version>1.0.11</version>
+            <version>1.0.12</version>
         </dependency>
         <!-- Needed indirectly for the transaction manager -->
         <dependency>

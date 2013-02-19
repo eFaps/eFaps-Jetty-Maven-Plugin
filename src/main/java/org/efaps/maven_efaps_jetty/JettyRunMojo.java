@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2012 The eFaps Team
+ * Copyright 2003 - 2013 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.eclipse.jetty.plus.webapp.EnvConfiguration;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
@@ -42,11 +45,6 @@ import org.efaps.init.StartupDatabaseConnection;
 import org.efaps.init.StartupException;
 import org.efaps.maven.logger.SLF4JOverMavenLog;
 import org.efaps.maven_efaps_jetty.configuration.ServerDefinition;
-import org.jfrog.maven.annomojo.annotations.MojoGoal;
-import org.jfrog.maven.annomojo.annotations.MojoParameter;
-import org.jfrog.maven.annomojo.annotations.MojoPhase;
-import org.jfrog.maven.annomojo.annotations.MojoRequiresDependencyResolution;
-import org.jfrog.maven.annomojo.annotations.MojoRequiresDirectInvocation;
 import org.xml.sax.SAXException;
 
 /**
@@ -56,44 +54,43 @@ import org.xml.sax.SAXException;
  * @version $Id$
  * @todo description
  */
-@MojoGoal(value = "run")
-@MojoRequiresDirectInvocation(value = true)
-@MojoPhase(value = "install")
-@MojoRequiresDependencyResolution(value = "compile")
+@Mojo(name = "run", requiresDirectInvocation = true, defaultPhase = LifecyclePhase.INSTALL,
+                requiresDependencyResolution = ResolutionScope.COMPILE)
 public class JettyRunMojo
-    implements Mojo
+    implements org.apache.maven.plugin.Mojo
 {
+
     /**
      * Defines the Port on which the Jetty is started. Default value is
      * <i>8888</i>.
      */
-    @MojoParameter(defaultValue = "8888")
+    @Parameter(defaultValue = "8888")
     private int port;
 
     /**
      * Defines the Host (Adapter) on which the jetty is started. Default value
      * is <i>localhost</i>.
      */
-    @MojoParameter(defaultValue = "127.0.0.1")
+    @Parameter(defaultValue = "127.0.0.1")
     private String host;
 
-    /**
+  /**
      *
      */
-    @MojoParameter(required = true)
+    @Parameter(required = true)
     private String jaasConfigFile;
 
     /**
      *
      */
-    @MojoParameter(required = true)
+    @Parameter(required = true)
     private String configFile;
 
 
     /**
      * Name of the class for the transaction manager.
      */
-    @MojoParameter()
+    @Parameter()
     private String envFile;
 
     /**
@@ -103,34 +100,34 @@ public class JettyRunMojo
      * @see javax.sql.DataSource
      * @see #initDatabase
      */
-    @MojoParameter(required = true, expression = "${org.efaps.db.factory}")
+    @Parameter(required = true, property = "org.efaps.db.factory")
     private String factory;
 
     /**
      * Holds all properties of the connection to the database. The properties
      * are separated by a comma.
      */
-    @MojoParameter(expression = "${org.efaps.db.connection}", required = true)
+    @Parameter(property = "org.efaps.db.connection", required = true)
     private String connection;
 
     /**
      * Defines the database type (used to define database specific
      * implementations).
      */
-    @MojoParameter(expression = "${org.efaps.db.type}", required = true)
+    @Parameter(property = "org.efaps.db.type", required = true)
     private String type;
 
     /**
      * Value for the timeout of the transaction.
      */
-    @MojoParameter(expression = "${org.efaps.configuration.properties}", required = false)
+    @Parameter(property = "org.efaps.configuration.properties", required = false)
     private String configProps;
 
 
     /**
      * Name of the class for the transaction manager.
      */
-    @MojoParameter(expression = "${org.efaps.transaction.manager}", defaultValue = "org.objectweb.jotm.Current",
+    @Parameter(property = "org.efaps.transaction.manager", defaultValue = "org.objectweb.jotm.Current",
                     required = true)
     private String transactionManager;
 
