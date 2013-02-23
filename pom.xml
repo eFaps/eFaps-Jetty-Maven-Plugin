@@ -31,7 +31,7 @@
         <!-- Jetty Version, used also to build the plug-in version number -->
         <jettyVersion>8.1.9.v20130131</jettyVersion>
         <webappVersion>[3.0.0-SNAPSHOT,3.1.0)</webappVersion>
-        <mobileVersion>[2.2.0-SNAPSHOT,2.3.0)</mobileVersion>
+        <mobileVersion>[3.0.0-SNAPSHOT,3.1.0)</mobileVersion>
         <!-- correct encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
