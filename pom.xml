@@ -42,7 +42,7 @@
     <packaging>maven-plugin</packaging>
     <groupId>org.efaps</groupId>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
-    <version>3.0.0-8.1.9.v20130131</version>
+    <version>3.0.1-8.1.9.v20130131-SNAPSHOT</version>
 
     <name>eFaps Maven Jetty-plugin</name>
 
@@ -104,9 +104,9 @@
 
     <!-- SubVersion Repository -->
     <scm>
-        <connection>scm:svn:http://efaps.googlecode.com/svn/maven-efaps-jetty/tags/efaps-jetty-maven-plugin-3.0.0-8.1.9.v20130131</connection>
-        <developerConnection>scm:svn:https://efaps.googlecode.com/svn/maven-efaps-jetty/tags/efaps-jetty-maven-plugin-3.0.0-8.1.9.v20130131</developerConnection>
-        <url>http://efaps.googlecode.com/svn/maven-efaps-jetty/tags/efaps-jetty-maven-plugin-3.0.0-8.1.9.v20130131</url>
+        <connection>scm:svn:http://efaps.googlecode.com/svn/maven-efaps-jetty/trunk</connection>
+        <developerConnection>scm:svn:https://efaps.googlecode.com/svn/maven-efaps-jetty/trunk</developerConnection>
+        <url>http://efaps.googlecode.com/svn/maven-efaps-jetty/</url>
     </scm>
 
     <!-- Distribution Repository -->
