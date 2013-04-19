@@ -131,6 +131,9 @@ public class JettyRunMojo
                     required = true)
     private String transactionManager;
 
+    /**
+     * Name of the class for the transaction Synchronization Registry.
+     */
     @Parameter(property = "org.efaps.transaction.synchronizationRegistry",
            defaultValue = "com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionSynchronizationRegistryImple",
                     required = true)
