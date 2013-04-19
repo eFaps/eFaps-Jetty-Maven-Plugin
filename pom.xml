@@ -29,7 +29,7 @@
 
     <properties>
         <!-- Jetty Version, used also to build the plug-in version number -->
-        <jettyVersion>8.1.9.v20130131</jettyVersion>
+        <jettyVersion>8.1.10.v20130312</jettyVersion>
         <webappVersion>[3.1.0-SNAPSHOT,3.2.0)</webappVersion>
         <mobileVersion>[3.0.0-SNAPSHOT,3.1.0)</mobileVersion>
         <!-- correct encoding -->
@@ -42,7 +42,7 @@
     <packaging>maven-plugin</packaging>
     <groupId>org.efaps</groupId>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
-    <version>3.1.0-8.1.9.v20130131-SNAPSHOT</version>
+    <version>3.1.0-8.1.10.v20130312-SNAPSHOT</version>
 
     <name>eFaps Maven Jetty-plugin</name>
 
@@ -370,6 +370,12 @@
             <groupId>org.efaps</groupId>
             <artifactId>efaps-webapp</artifactId>
             <version>${webappVersion}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jfreechart</artifactId>
+                    <groupId>jfree</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -403,6 +409,16 @@
             <groupId>org.jboss.jbossts.jta</groupId>
             <artifactId>narayana-jta</artifactId>
             <version>4.17.3.Final</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hornetq-core</artifactId>
+                    <groupId>org.hornetq</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jfreechart</artifactId>
+                    <groupId>jfree</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
