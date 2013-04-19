@@ -123,14 +123,18 @@ public class JettyRunMojo
     @Parameter(property = "org.efaps.configuration.properties", required = false)
     private String configProps;
 
-
     /**
      * Name of the class for the transaction manager.
      */
-    @Parameter(property = "org.efaps.transaction.manager", defaultValue = "org.objectweb.jotm.Current",
+    @Parameter(property = "org.efaps.transaction.manager",
+                    defaultValue = "com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple",
                     required = true)
     private String transactionManager;
 
+    @Parameter(property = "org.efaps.transaction.synchronizationRegistry",
+           defaultValue = "com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionSynchronizationRegistryImple",
+                    required = true)
+    private String transactionSynchronizationRegistry;
 
     /**
      * The Apache Maven logger is stored in this instance variable.
@@ -225,6 +229,7 @@ public class JettyRunMojo
                                               this.factory,
                                               this.connection,
                                               this.transactionManager,
+                                              this.transactionSynchronizationRegistry,
                                               convertToMap(this.configProps));
         } catch (final StartupException e) {
             getLog().error("Initialize Database Connection failed: " + e.toString());

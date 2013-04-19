@@ -30,7 +30,7 @@
     <properties>
         <!-- Jetty Version, used also to build the plug-in version number -->
         <jettyVersion>8.1.9.v20130131</jettyVersion>
-        <webappVersion>[3.0.0-SNAPSHOT,3.1.0)</webappVersion>
+        <webappVersion>[3.1.0-SNAPSHOT,3.2.0)</webappVersion>
         <mobileVersion>[3.0.0-SNAPSHOT,3.1.0)</mobileVersion>
         <!-- correct encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,7 +42,7 @@
     <packaging>maven-plugin</packaging>
     <groupId>org.efaps</groupId>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
-    <version>3.0.1-8.1.9.v20130131-SNAPSHOT</version>
+    <version>3.1.0-8.1.9.v20130131-SNAPSHOT</version>
 
     <name>eFaps Maven Jetty-plugin</name>
 
@@ -391,13 +391,6 @@
             <version>${jettyVersion}</version>
         </dependency>
 
-        <!-- Javax Naming implementation -->
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-jndi</artifactId>
-            <version>${jettyVersion}</version>
-        </dependency>
-
         <!-- Jetty plus configuration neede to use JNDI complettely -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -405,38 +398,11 @@
             <version>${jettyVersion}</version>
         </dependency>
 
-        <!-- java transaction manager -->
+         <!-- java transaction manager -->
         <dependency>
-            <groupId>jotm</groupId>
-            <artifactId>jotm</artifactId>
-            <version>2.0.10</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.resource</groupId>
-                    <artifactId>connector-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- replacement for the javax.resource.connector-api-1.5 needed by jotm-->
-        <dependency>
-            <groupId>org.ow2.spec.ee</groupId>
-            <artifactId>ow2-connector-1.5-spec</artifactId>
-            <version>1.0.12</version>
-        </dependency>
-        <!-- Needed indirectly for the transaction manager -->
-        <dependency>
-            <groupId>javax.transaction</groupId>
-            <artifactId>jta</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.resource</groupId>
-            <artifactId>connector</artifactId>
-            <version>1.0</version>
+            <groupId>org.jboss.jbossts.jta</groupId>
+            <artifactId>narayana-jta</artifactId>
+            <version>4.17.3.Final</version>
         </dependency>
     </dependencies>
 </project>
