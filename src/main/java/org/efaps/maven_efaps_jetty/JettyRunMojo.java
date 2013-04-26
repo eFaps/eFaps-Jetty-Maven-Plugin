@@ -217,6 +217,10 @@ public class JettyRunMojo
     protected void init()
     {
         try  {
+            //TODO correct that
+            System.setProperty("ObjectStoreEnvironmentBean.objectStoreDir", "target");
+            System.setProperty("ObjectStoreEnvironmentBean.localOSRoot", "eFapsStore");
+
             Class.forName("org.efaps.maven.logger.SLF4JOverMavenLog");
             SLF4JOverMavenLog.LOGGER = getLog();
         } catch (final ClassNotFoundException e)  {
