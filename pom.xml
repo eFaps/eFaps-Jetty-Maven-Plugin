@@ -29,9 +29,9 @@
 
     <properties>
         <!-- Jetty Version, used also to build the plug-in version number -->
-        <jettyVersion>8.1.10.v20130312</jettyVersion>
-        <webappVersion>[3.1.0-SNAPSHOT,3.2.0)</webappVersion>
-        <mobileVersion>[3.1.0-SNAPSHOT,3.2.0)</mobileVersion>
+        <jettyVersion>8.1.11.v20130520</jettyVersion>
+        <webappVersion>[3.2.0-SNAPSHOT,3.3.0)</webappVersion>
+        <mobileVersion>[3.2.0-SNAPSHOT,3.3.0)</mobileVersion>
         <!-- correct encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -42,7 +42,7 @@
     <packaging>maven-plugin</packaging>
     <groupId>org.efaps</groupId>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
-    <version>3.1.0-8.1.10.v20130312-SNAPSHOT</version>
+    <version>3.2.0-8.1.11.v20130520-SNAPSHOT</version>
 
     <name>eFaps Maven Jetty-plugin</name>
 
@@ -163,8 +163,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
