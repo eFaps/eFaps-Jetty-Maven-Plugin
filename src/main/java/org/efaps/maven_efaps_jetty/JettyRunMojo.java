@@ -31,10 +31,11 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.eclipse.jetty.plus.webapp.EnvConfiguration;
-import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.efaps.init.StartupDatabaseConnection;
@@ -178,11 +179,13 @@ public class JettyRunMojo
         getLog().info("Starting jetty Version "
                       + server.getClass().getPackage().getImplementationVersion());
 
-        final Connector connector = new SelectChannelConnector();
-        connector.setPort(this.port);
-        connector.setHost(this.host);
-        connector.setRequestHeaderSize(131072);
-        server.addConnector(connector);
+        final HttpConfiguration http_config = new HttpConfiguration();
+        http_config.setRequestHeaderSize(131072);
+        final ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(http_config));
+        http.setPort(this.port);
+        http.setHost(this.host);
+
+        server.addConnector(http);
 
         final ContextHandlerCollection contexts = new ContextHandlerCollection();
         server.setHandler(contexts);

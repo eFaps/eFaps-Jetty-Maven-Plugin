@@ -29,7 +29,7 @@
 
     <properties>
         <!-- Jetty Version, used also to build the plug-in version number -->
-        <jettyVersion>8.1.11.v20130520</jettyVersion>
+        <jettyVersion>9.0.6.v20130930</jettyVersion>
         <webappVersion>[3.2.0-SNAPSHOT,3.3.0)</webappVersion>
         <mobileVersion>[3.2.0-SNAPSHOT,3.3.0)</mobileVersion>
         <!-- correct encoding -->
@@ -42,7 +42,7 @@
     <packaging>maven-plugin</packaging>
     <groupId>org.efaps</groupId>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
-    <version>3.2.0-8.1.11.v20130520-SNAPSHOT</version>
+    <version>3.2.0-9.0.6.v20130930-SNAPSHOT</version>
 
     <name>eFaps Maven Jetty-plugin</name>
 
@@ -401,6 +401,12 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-plus</artifactId>
+            <version>${jettyVersion}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-server</artifactId>
             <version>${jettyVersion}</version>
         </dependency>
 
