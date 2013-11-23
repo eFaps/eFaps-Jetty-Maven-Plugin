@@ -18,7 +18,7 @@
  * Last Changed By: $Author$
  */
 
-package org.efaps.maven_efaps_jetty.configuration;
+package org.efaps.maven.jetty.configuration;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;

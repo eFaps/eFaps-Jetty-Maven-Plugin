@@ -23,33 +23,35 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-
+    <parent>
+        <groupId>org.efaps</groupId>
+        <artifactId>efaps-parent</artifactId>
+        <version>3.2.0-SNAPSHOT</version>
+    </parent>
+    
     <properties>
         <!-- Jetty Version, used also to build the plug-in version number -->
-        <jettyVersion>9.0.7.v20131107</jettyVersion>
         <webappVersion>[3.2.0-SNAPSHOT,3.3.0)</webappVersion>
         <mobileVersion>[3.2.0-SNAPSHOT,3.3.0)</mobileVersion>
-        <!-- correct encoding -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <!-- ***********************************************************************
     * Module Definition
     ************************************************************************ -->
     <packaging>maven-plugin</packaging>
-    <groupId>org.efaps</groupId>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
     <version>3.2.0-9.0.7.v20131107-SNAPSHOT</version>
 
     <name>eFaps Maven Jetty-plugin</name>
 
     <prerequisites>
-        <maven>3.0</maven>
+        <maven>3.1</maven>
     </prerequisites>
-    <!-- Project Information -->
+    
     <description>
         Maven plugin to start Jetty as application server for eFaps.
     </description>
@@ -161,7 +163,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
@@ -170,7 +171,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.4</version>
                 <configuration>
                     <mavenExecutorId>forked-path</mavenExecutorId>
                 </configuration>
@@ -178,7 +178,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.0</version>
                 <configuration>
                     <reportPlugins>
                         <plugin>
@@ -344,6 +343,21 @@
     ************************************************************************ -->
     <dependencies>
         <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.1.1</version>
+            <!-- annotations are not needed for plugin execution so you can
+                remove this dependency for execution with using provided scope -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>2.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+         
+        <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
             <version>3.2</version>
@@ -355,15 +369,7 @@
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
-            <version>3.0.10</version>
-        </dependency>
-
-
-        <!-- eFaps Maven Logger -->
-        <dependency>
-            <groupId>org.efaps</groupId>
-            <artifactId>maven-slf4jlogger</artifactId>
-            <version>1.0.3</version>
+            <version>3.0.15</version>
         </dependency>
 
         <dependency>
@@ -394,27 +400,33 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <version>${jettyVersion}</version>
+            <version>${jetty.version}</version>
         </dependency>
 
         <!-- Jetty plus configuration neede to use JNDI complettely -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-plus</artifactId>
-            <version>${jettyVersion}</version>
+            <version>${jetty.version}</version>
         </dependency>
         
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-server</artifactId>
-            <version>${jettyVersion}</version>
+            <version>${jetty.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        
          <!-- java transaction manager -->
         <dependency>
             <groupId>org.jboss.jbossts.jta</groupId>
             <artifactId>narayana-jta</artifactId>
-            <version>4.17.3.Final</version>
+            <version>4.17.4.Final</version>
             <exclusions>
                 <exclusion>
                     <artifactId>hornetq-core</artifactId>

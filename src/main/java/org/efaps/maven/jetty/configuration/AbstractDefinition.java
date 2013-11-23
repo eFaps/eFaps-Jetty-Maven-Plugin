@@ -17,7 +17,7 @@
  * Last Changed:    $Date$
  * Last Changed By: $Author$
  */
-package org.efaps.maven_efaps_jetty.configuration;
+package org.efaps.maven.jetty.configuration;
 
 import java.util.HashMap;
 import java.util.Map;

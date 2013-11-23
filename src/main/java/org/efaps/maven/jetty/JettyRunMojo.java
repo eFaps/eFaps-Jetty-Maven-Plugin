@@ -18,18 +18,20 @@
  * Last Changed By: $Author$
  */
 
-package org.efaps.maven_efaps_jetty;
+package org.efaps.maven.jetty;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 
+import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.project.MavenProject;
 import org.eclipse.jetty.plus.webapp.EnvConfiguration;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -40,8 +42,9 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.efaps.init.StartupDatabaseConnection;
 import org.efaps.init.StartupException;
-import org.efaps.maven.logger.SLF4JOverMavenLog;
-import org.efaps.maven_efaps_jetty.configuration.ServerDefinition;
+import org.efaps.maven.jetty.configuration.ServerDefinition;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -52,9 +55,9 @@ import org.xml.sax.SAXException;
  * @todo description
  */
 @Mojo(name = "run", requiresDirectInvocation = true, defaultPhase = LifecyclePhase.INSTALL,
-                requiresDependencyResolution = ResolutionScope.COMPILE)
+                requiresDependencyResolution = ResolutionScope.RUNTIME_PLUS_SYSTEM, requiresProject = true )
 public class JettyRunMojo
-    implements org.apache.maven.plugin.Mojo
+    extends AbstractMojo
 {
 
     /**
@@ -71,24 +74,29 @@ public class JettyRunMojo
     @Parameter(defaultValue = "127.0.0.1")
     private String host;
 
-  /**
-     *
+    /**
+     * JaasConfigFile.
      */
     @Parameter(required = true)
     private String jaasConfigFile;
 
     /**
-     *
+     * Configuration file path.
      */
     @Parameter(required = true)
     private String configFile;
 
+    /**
+     * Jetty env file path.
+     */
+    @Parameter
+    private String envFile;
 
     /**
-     * Name of the class for the transaction manager.
+     * LogBack file path.
      */
-    @Parameter()
-    private String envFile;
+    @Parameter(alias = "lbf")
+    private String logbackFile;
 
     /**
      * Class name of the SQL database factory (implementing interface
@@ -137,12 +145,10 @@ public class JettyRunMojo
     private String transactionSynchronizationRegistry;
 
     /**
-     * The Apache Maven logger is stored in this instance variable.
-     *
-     * @see #getLog
-     * @see #setLog
-     */
-    private Log log = null;
+     * The current Maven project.
+    */
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
+    private MavenProject project;
 
     /**
      * Runs the eFaps Jetty server.
@@ -219,51 +225,42 @@ public class JettyRunMojo
      */
     protected void init()
     {
-        try  {
-            //TODO correct that
-            System.setProperty("ObjectStoreEnvironmentBean.objectStoreDir", "target");
-            System.setProperty("ObjectStoreEnvironmentBean.localOSRoot", "eFapsStore");
-
-            Class.forName("org.efaps.maven.logger.SLF4JOverMavenLog");
-            SLF4JOverMavenLog.LOGGER = getLog();
-        } catch (final ClassNotFoundException e)  {
-            getLog().error("could not initialize SLF4J over maven logger");
-        }
-
+        // TODO correct that
+        System.setProperty("ObjectStoreEnvironmentBean.objectStoreDir", "target");
+        System.setProperty("ObjectStoreEnvironmentBean.localOSRoot", "eFapsStore");
         try {
+            try {
+                if (this.logbackFile != null) {
+                    final ILoggerFactory logContext = LoggerFactory.getILoggerFactory();
+                    if(logContext.getClass().getName().contains("ch.qos.logback.classic.LoggerContext")) {
+                        final Class<?> logContextInter = this.project.getClass().getClassLoader()
+                                        .loadClass("ch.qos.logback.core.Context");
+
+                        final Class<?> configurator = this.project.getClass().getClassLoader()
+                                        .loadClass("ch.qos.logback.classic.joran.JoranConfigurator");
+                        final Object configInstance = configurator.newInstance();
+
+                        final Method method = configurator.getMethod("setContext", new Class[] { logContextInter });
+                        method.invoke(configInstance, logContext);
+
+                        final Method reset = logContext.getClass().getMethod("reset");
+                        reset.invoke(logContext);
+
+                        final Method doConfigure = configurator.getMethod("doConfigure", new Class[] { String.class});
+                        doConfigure.invoke(configInstance, this.logbackFile);
+                    }
+                }
+            } catch (final Exception e) {
+                getLog().error("Configuration of LogBack failed.",  e);
+            }
             StartupDatabaseConnection.startup(this.type,
-                                              this.factory,
-                                              this.connection,
-                                              this.transactionManager,
-                                              this.transactionSynchronizationRegistry,
-                                              this.configProps);
+                            this.factory,
+                            this.connection,
+                            this.transactionManager,
+                            this.transactionSynchronizationRegistry,
+                            this.configProps);
         } catch (final StartupException e) {
             getLog().error("Initialize Database Connection failed: " + e.toString());
         }
-    }
-
-    /**
-     * This is the setter method for instance variable {@link #log}.
-     *
-     * @param _log
-     *          new value for instance variable {@link #log}
-     * @see #log
-     * @see #getLog
-     */
-    public void setLog(final Log _log)
-    {
-        this.log = _log;
-    }
-
-    /**
-     * This is the getter method for instance variable {@link #log}.
-     *
-     * @return value of instance variable {@link #log}
-     * @see #log
-     * @see #setLog
-     */
-    public Log getLog()
-    {
-        return this.log;
     }
 }
