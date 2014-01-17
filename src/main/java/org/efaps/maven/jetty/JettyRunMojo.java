@@ -75,6 +75,20 @@ public class JettyRunMojo
     private String host;
 
     /**
+     * Defines Form Limits for the Server. Default value
+     * is <i>200000</i>.
+     */
+    @Parameter(defaultValue = "200000")
+    private int maxFormContentSize;
+
+    /**
+     * Defines Form Limits for the Server. Default value
+     * is <i>1500</i>.
+     */
+    @Parameter(defaultValue = "1500")
+    private String maxFormKeys;
+
+    /**
      * JaasConfigFile.
      */
     @Parameter(required = true)
@@ -182,8 +196,10 @@ public class JettyRunMojo
             throw new MojoExecutionException("Could not read the Jetty env", e);
         }
 
-        getLog().info("Starting jetty Version "
-                      + server.getClass().getPackage().getImplementationVersion());
+        getLog().info("Starting jetty Version " + server.getClass().getPackage().getImplementationVersion());
+
+        server.setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", this.maxFormContentSize);
+        server.setAttribute("org.eclipse.jetty.server.Request.maxFormKeys", this.maxFormKeys);
 
         final HttpConfiguration http_config = new HttpConfiguration();
         http_config.setRequestHeaderSize(131072);

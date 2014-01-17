@@ -44,7 +44,7 @@
     ************************************************************************ -->
     <packaging>maven-plugin</packaging>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
-    <version>3.2.0-9.0.7.v20131107-SNAPSHOT</version>
+    <version>3.2.0-9.1.1.v20140108-SNAPSHOT</version>
 
     <name>eFaps Maven Jetty-plugin</name>
 
