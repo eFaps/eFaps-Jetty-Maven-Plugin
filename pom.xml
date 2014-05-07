@@ -34,9 +34,7 @@
     </parent>
 
     <properties>
-        <!-- Jetty Version, used also to build the plug-in version number -->
         <webappVersion>[3.2.0-SNAPSHOT,3.3.0)</webappVersion>
-        <mobileVersion>[3.2.0-SNAPSHOT,3.3.0)</mobileVersion>
     </properties>
 
     <!-- ***********************************************************************
@@ -44,7 +42,7 @@
     ************************************************************************ -->
     <packaging>maven-plugin</packaging>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
-    <version>3.2.0-9.1.3.v20140225-SNAPSHOT</version>
+    <version>3.2.0-9.1-SNAPSHOT</version>
 
     <name>eFaps Maven Jetty-plugin</name>
 
@@ -382,12 +380,6 @@
                     <groupId>jfree</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.efaps</groupId>
-            <artifactId>efaps-mobile</artifactId>
-            <version>${mobileVersion}</version>
         </dependency>
 
         <dependency>
