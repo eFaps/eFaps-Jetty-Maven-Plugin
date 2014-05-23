@@ -24,6 +24,11 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.websocket.Endpoint;
+import javax.websocket.server.ServerEndpointConfig;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -32,6 +37,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
+import org.apache.wicket.protocol.ws.javax.WicketServerApplicationConfig;
 import org.eclipse.jetty.plus.webapp.EnvConfiguration;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -40,6 +46,8 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.websocket.jsr356.server.ServerContainer;
+import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 import org.efaps.init.StartupDatabaseConnection;
 import org.efaps.init.StartupException;
 import org.efaps.maven.jetty.configuration.ServerDefinition;
@@ -215,14 +223,30 @@ public class JettyRunMojo
         System.setProperty("java.security.auth.login.config",
                            this.jaasConfigFile);
         new WebAppContext();
-        final ServletContextHandler handler = new ServletContextHandler(contexts,
+        final ServletContextHandler context = new ServletContextHandler(contexts,
                                                                         "/eFaps",
                                                                         ServletContextHandler.SESSIONS);
 
         final ServerDefinition serverDef = ServerDefinition.read(this.configFile);
-        serverDef.updateServer(handler);
+        serverDef.updateServer(context);
 
         try {
+            if (serverDef.isWebsocket()) {
+                final Set<Class<? extends Endpoint>> discoveredExtendedEndpoints = new HashSet<>();
+
+                // Initialize javax.websocket layer
+                final ServerContainer wscontainer = WebSocketServerContainerInitializer.configureContext(context);
+
+                final WicketServerApplicationConfig appConfig = new WicketServerApplicationConfig();
+                final Set<ServerEndpointConfig> seconfigs = appConfig.getEndpointConfigs(discoveredExtendedEndpoints);
+
+                if (seconfigs != null)
+                {
+                    for (final ServerEndpointConfig seconfig : seconfigs) {
+                        wscontainer.addEndpoint(seconfig);
+                    }
+                }
+            }
             getLog().info("Starting Server");
             server.start();
             getLog().info("Server Started");

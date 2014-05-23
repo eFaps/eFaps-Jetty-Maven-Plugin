@@ -32,7 +32,7 @@ abstract class AbstractDefinition
     /**
      * Path specification.
      */
-    private String pathSpec = null;
+    private String path = null;
 
     /**
      * Name.
@@ -42,7 +42,7 @@ abstract class AbstractDefinition
     /**
      * Class name.
      */
-    private String className = null;
+    private String classname = null;
 
     /**
      * Map with all init parameters.
@@ -57,9 +57,9 @@ abstract class AbstractDefinition
      * @param _pathSpec   path specification
      * @see #pathSpec
      */
-    public void setPathSpec(final String _pathSpec)
+    public void setPath(final String _pathSpec)
     {
-        this.pathSpec = _pathSpec;
+        this.path = _pathSpec;
     }
 
     /**
@@ -68,9 +68,9 @@ abstract class AbstractDefinition
      * @return value of instance variable pathSpec
      * @see #pathSpec
      */
-    protected String getPathSpec()
+    protected String getPath()
     {
-        return this.pathSpec;
+        return this.path;
     }
 
     /**
@@ -79,9 +79,9 @@ abstract class AbstractDefinition
      * @param _className  name of the class used from the filter
      * @see #className
      */
-    public void setClassName(final String _className)
+    public void setClassname(final String _className)
     {
-        this.className = _className;
+        this.classname = _className;
     }
 
     /**
@@ -90,9 +90,9 @@ abstract class AbstractDefinition
      * @return value of instance variable className
      * @see #className
      */
-    protected String getClassName()
+    protected String getClassname()
     {
-        return this.className;
+        return this.classname;
     }
 
     /**

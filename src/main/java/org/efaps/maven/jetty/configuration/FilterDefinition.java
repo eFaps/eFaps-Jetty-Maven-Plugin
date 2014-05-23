@@ -44,8 +44,8 @@ public class FilterDefinition
     {
         final FilterHolder filter = new FilterHolder();
         filter.setName(getName());
-        filter.setClassName(getClassName());
+        filter.setClassName(getClassname());
         filter.setInitParameters(getIniParams());
-        _handler.addFilter(filter, getPathSpec(), EnumSet.of(DispatcherType.REQUEST));
+        _handler.addFilter(filter, getPath(), EnumSet.of(DispatcherType.REQUEST));
     }
 }

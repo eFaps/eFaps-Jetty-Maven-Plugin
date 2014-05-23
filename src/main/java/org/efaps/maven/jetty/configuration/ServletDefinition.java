@@ -34,12 +34,12 @@ public class ServletDefinition
     /**
      * Initialize order of the servlet.
      */
-    private Integer initOrder;
+    private Integer initorder;
 
     /**
      * Display name of the servlet.
      */
-    private String displayName;
+    private String displayname;
 
     /**
      *
@@ -49,13 +49,13 @@ public class ServletDefinition
     {
         final ServletHolder servlet = new ServletHolder();
         servlet.setName(getName());
-        servlet.setDisplayName(this.displayName);
-        servlet.setClassName(getClassName());
+        servlet.setDisplayName(this.displayname);
+        servlet.setClassName(getClassname());
         servlet.setInitParameters(getIniParams());
-        if (this.initOrder != null)  {
-            servlet.setInitOrder(this.initOrder);
+        if (this.initorder != null)  {
+            servlet.setInitOrder(this.initorder);
         }
-        _handler.addServlet(servlet, getPathSpec());
+        _handler.addServlet(servlet, getPath());
     }
 
     /**
@@ -64,9 +64,9 @@ public class ServletDefinition
      * @param _initOrder    new initt order to set
      * @see #initOrder
      */
-    public void setInitOrder(final int _initOrder)
+    public void setInitorder(final int _initOrder)
     {
-        this.initOrder = _initOrder;
+        this.initorder = _initOrder;
     }
 
     /**
@@ -75,8 +75,8 @@ public class ServletDefinition
      * @param _displayName  new display name to set
      * @see #displayName
      */
-    public void setDisplayName(final String _displayName)
+    public void setDisplayname(final String _displayName)
     {
-        this.displayName = _displayName;
+        this.displayname = _displayName;
     }
 }

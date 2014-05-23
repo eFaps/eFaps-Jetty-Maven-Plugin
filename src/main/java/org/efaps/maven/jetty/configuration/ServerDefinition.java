@@ -24,7 +24,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.digester.Digester;
+import org.apache.commons.digester3.Digester;
+import org.apache.commons.digester3.annotations.rules.SetNext;
+import org.apache.commons.digester3.binder.AbstractRulesModule;
+import org.apache.commons.digester3.binder.DigesterLoader;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +55,11 @@ public class ServerDefinition
     private final List<ServletDefinition> servlets = new ArrayList<ServletDefinition>();
 
     /**
+     * Use websocket or not.
+     */
+    private boolean websocket;
+
+    /**
      * Initializes a new instanc of the server definition a a XML file.
      *
      * @param _url  path to the XML file within the server definition
@@ -61,36 +69,36 @@ public class ServerDefinition
     {
         ServerDefinition ret = null;
         try {
-            final Digester digester = new Digester();
-            digester.setValidating(false);
-            digester.addObjectCreate("server", ServerDefinition.class);
+            final DigesterLoader loader = DigesterLoader.newLoader(new AbstractRulesModule()
+            {
 
-            digester.addObjectCreate("server/filter", FilterDefinition.class);
-            digester.addSetNext("server/filter", "addFilter");
-            digester.addCallMethod("server/filter", "setName", 1);
-            digester.addCallParam("server/filter", 0, "name");
-            digester.addCallMethod("server/filter", "setClassName", 1);
-            digester.addCallParam("server/filter", 0, "classname");
-            digester.addCallMethod("server/filter", "setPathSpec", 1);
-            digester.addCallParam("server/filter", 0, "path");
-            digester.addCallMethod("server/filter/parameter", "addIniParam", 2);
-            digester.addCallParam("server/filter/parameter", 0, "key");
-            digester.addCallParam("server/filter/parameter", 1);
+                @Override
+                protected void configure()
+                {
+                   forPattern("server").createObject().ofType(ServerDefinition.class)
+                       .then().setProperties();
 
-            digester.addObjectCreate("server/servlet", ServletDefinition.class);
-            digester.addSetNext("server/servlet", "addServlet");
-            digester.addCallMethod("server/servlet", "setName", 1);
-            digester.addCallParam("server/servlet", 0, "name");
-            digester.addCallMethod("server/servlet", "setClassName", 1);
-            digester.addCallParam("server/servlet", 0, "classname");
-            digester.addCallMethod("server/servlet", "setPathSpec", 1);
-            digester.addCallParam("server/servlet", 0, "path");
-            digester.addCallMethod("server/servlet", "setInitOrder", 1, new Class[]{Integer.class});
-            digester.addCallParam("server/servlet", 0, "initorder");
-            digester.addCallMethod("server/servlet/parameter", "addIniParam", 2);
-            digester.addCallParam("server/servlet/parameter", 0, "key");
-            digester.addCallParam("server/servlet/parameter", 1);
+                   forPattern("server/filter").createObject().ofType(FilterDefinition.class)
+                       .then().setNext("addFilter");
+                   forPattern("server/filter").setProperties();
+                   forPattern("server/filter/parameter")
+                       .callMethod("addIniParam").withParamCount(2)
+                       .withParamTypes(String.class, String.class)
+                       .then().callParam().fromAttribute("key").ofIndex(0)
+                       .then().callParam().ofIndex(1);
 
+                   forPattern("server/servlet").createObject().ofType(ServletDefinition.class)
+                       .then().setNext("addServlet");
+                   forPattern("server/servlet").setProperties();
+                   forPattern("server/servlet/parameter")
+                       .callMethod("addIniParam").withParamCount(2)
+                       .withParamTypes(String.class, String.class)
+                       .then().callParam().fromAttribute("key").ofIndex(0)
+                       .then().callParam().ofIndex(1);
+                }
+            });
+
+            final Digester digester = loader.newDigester();
             ret = (ServerDefinition) digester.parse(_url);
 
         } catch (final IOException e) {
@@ -125,6 +133,7 @@ public class ServerDefinition
      * @param _filter filter to add to the list of filters
      * @see #filters
      */
+    @SetNext
     public void addFilter(final FilterDefinition _filter)
     {
         this.filters.add(_filter);
@@ -136,8 +145,30 @@ public class ServerDefinition
      * @param _servlet  servlet to add to the list of servlets
      * @see #servlets
      */
+    @SetNext
     public void addServlet(final ServletDefinition _servlet)
     {
         this.servlets.add(_servlet);
+    }
+
+    /**
+     * Getter method for the instance variable {@link #websocket}.
+     *
+     * @return value of instance variable {@link #websocket}
+     */
+    public boolean isWebsocket()
+    {
+        return this.websocket;
+    }
+
+
+    /**
+     * Setter method for instance variable {@link #websocket}.
+     *
+     * @param _websocket value for instance variable {@link #websocket}
+     */
+    public void setWebsocket(final boolean _websocket)
+    {
+        this.websocket = _websocket;
     }
 }
