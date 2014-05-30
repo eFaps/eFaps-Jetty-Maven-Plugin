@@ -23,12 +23,14 @@ package org.efaps.maven.jetty.configuration;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.annotations.rules.SetNext;
 import org.apache.commons.digester3.binder.AbstractRulesModule;
 import org.apache.commons.digester3.binder.DigesterLoader;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -38,6 +40,7 @@ import org.xml.sax.SAXException;
  * @version $Id$
  */
 public class ServerDefinition
+    extends AbstractDefinition
 {
     /**
      * Logging instance used to give logging information of this class.
@@ -77,6 +80,11 @@ public class ServerDefinition
                 {
                    forPattern("server").createObject().ofType(ServerDefinition.class)
                        .then().setProperties();
+                   forPattern("server/parameter")
+                       .callMethod("addIniParam").withParamCount(2)
+                       .withParamTypes(String.class, String.class)
+                       .then().callParam().fromAttribute("key").ofIndex(0)
+                       .then().callParam().ofIndex(1);
 
                    forPattern("server/filter").createObject().ofType(FilterDefinition.class)
                        .then().setNext("addFilter");
@@ -119,6 +127,9 @@ public class ServerDefinition
      */
     public void updateServer(final ServletContextHandler _handler)
     {
+        for (final Entry<String, String> entry : getIniParams().entrySet()) {
+            _handler.setInitParameter(entry.getKey(), entry.getValue());
+        }
         for (final FilterDefinition filter : this.filters)  {
             filter.updateServer(_handler);
         }
@@ -170,5 +181,15 @@ public class ServerDefinition
     public void setWebsocket(final boolean _websocket)
     {
         this.websocket = _websocket;
+    }
+
+    /**
+     * @param _wac context to be updated
+     */
+    public void updateContext(final WebAppContext _wac)
+    {
+        for (final Entry<String, String> entry : getIniParams().entrySet()) {
+            _wac.setInitParameter(entry.getKey(), entry.getValue());
+        }
     }
 }

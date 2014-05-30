@@ -51,6 +51,7 @@ import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainer
 import org.efaps.init.StartupDatabaseConnection;
 import org.efaps.init.StartupException;
 import org.efaps.maven.jetty.configuration.ServerDefinition;
+import org.efaps.ui.wicket.SocketInitializer;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -222,12 +223,13 @@ public class JettyRunMojo
 
         System.setProperty("java.security.auth.login.config",
                            this.jaasConfigFile);
+        final ServerDefinition serverDef = ServerDefinition.read(this.configFile);
+        //needed as default, must be loaded ad least
         new WebAppContext();
+
         final ServletContextHandler context = new ServletContextHandler(contexts,
                                                                         "/eFaps",
                                                                         ServletContextHandler.SESSIONS);
-
-        final ServerDefinition serverDef = ServerDefinition.read(this.configFile);
         serverDef.updateServer(context);
 
         try {
@@ -246,6 +248,7 @@ public class JettyRunMojo
                         wscontainer.addEndpoint(seconfig);
                     }
                 }
+                new SocketInitializer().onStartup(null, context.getServletContext());
             }
             getLog().info("Starting Server");
             server.start();
