@@ -42,7 +42,7 @@
     ************************************************************************ -->
     <packaging>maven-plugin</packaging>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
-    <version>3.2.0-9.1-SNAPSHOT</version>
+    <version>3.2.0-9.2-SNAPSHOT</version>
 
     <name>eFaps Maven Jetty-plugin</name>
 
