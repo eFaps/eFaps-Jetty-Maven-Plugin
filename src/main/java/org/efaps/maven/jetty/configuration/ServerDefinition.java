@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2012 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 package org.efaps.maven.jetty.configuration;
@@ -37,7 +34,6 @@ import org.xml.sax.SAXException;
 
 /**
  * @author The eFaps Team
- * @version $Id$
  */
 public class ServerDefinition
     extends AbstractDefinition
@@ -78,31 +74,31 @@ public class ServerDefinition
                 @Override
                 protected void configure()
                 {
-                   forPattern("server").createObject().ofType(ServerDefinition.class)
-                       .then().setProperties();
-                   forPattern("server/parameter")
-                       .callMethod("addIniParam").withParamCount(2)
-                       .withParamTypes(String.class, String.class)
-                       .then().callParam().fromAttribute("key").ofIndex(0)
-                       .then().callParam().ofIndex(1);
+                    forPattern("server").createObject().ofType(ServerDefinition.class)
+                        .then().setProperties();
+                    forPattern("server/parameter")
+                        .callMethod("addIniParam").withParamCount(2)
+                        .withParamTypes(String.class, String.class)
+                        .then().callParam().fromAttribute("key").ofIndex(0)
+                        .then().callParam().ofIndex(1);
 
-                   forPattern("server/filter").createObject().ofType(FilterDefinition.class)
-                       .then().setNext("addFilter");
-                   forPattern("server/filter").setProperties();
-                   forPattern("server/filter/parameter")
-                       .callMethod("addIniParam").withParamCount(2)
-                       .withParamTypes(String.class, String.class)
-                       .then().callParam().fromAttribute("key").ofIndex(0)
-                       .then().callParam().ofIndex(1);
+                    forPattern("server/filter").createObject().ofType(FilterDefinition.class)
+                        .then().setNext("addFilter");
+                    forPattern("server/filter").setProperties();
+                    forPattern("server/filter/parameter")
+                        .callMethod("addIniParam").withParamCount(2)
+                        .withParamTypes(String.class, String.class)
+                        .then().callParam().fromAttribute("key").ofIndex(0)
+                        .then().callParam().ofIndex(1);
 
-                   forPattern("server/servlet").createObject().ofType(ServletDefinition.class)
-                       .then().setNext("addServlet");
-                   forPattern("server/servlet").setProperties();
-                   forPattern("server/servlet/parameter")
-                       .callMethod("addIniParam").withParamCount(2)
-                       .withParamTypes(String.class, String.class)
-                       .then().callParam().fromAttribute("key").ofIndex(0)
-                       .then().callParam().ofIndex(1);
+                    forPattern("server/servlet").createObject().ofType(ServletDefinition.class)
+                        .then().setNext("addServlet");
+                    forPattern("server/servlet").setProperties();
+                    forPattern("server/servlet/parameter")
+                        .callMethod("addIniParam").withParamCount(2)
+                        .withParamTypes(String.class, String.class)
+                        .then().callParam().fromAttribute("key").ofIndex(0)
+                        .then().callParam().ofIndex(1);
                 }
             });
 
@@ -171,7 +167,6 @@ public class ServerDefinition
     {
         return this.websocket;
     }
-
 
     /**
      * Setter method for instance variable {@link #websocket}.

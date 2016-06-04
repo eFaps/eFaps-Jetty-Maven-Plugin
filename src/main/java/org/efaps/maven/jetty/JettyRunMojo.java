@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2013 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 package org.efaps.maven.jetty;
@@ -60,11 +57,9 @@ import org.xml.sax.SAXException;
  * The goal starts the Jetty web server.
  *
  * @author The eFaps Team
- * @version $Id$
- * @todo description
  */
 @Mojo(name = "run", requiresDirectInvocation = true, defaultPhase = LifecyclePhase.INSTALL,
-                requiresDependencyResolution = ResolutionScope.RUNTIME_PLUS_SYSTEM, requiresProject = true )
+                requiresDependencyResolution = ResolutionScope.RUNTIME_PLUS_SYSTEM, requiresProject = true)
 public class JettyRunMojo
     extends AbstractMojo
 {
@@ -178,6 +173,7 @@ public class JettyRunMojo
      *
      * @throws MojoExecutionException if Jetty web server could not be started
      */
+    @Override
     public void execute()
         throws MojoExecutionException
     {
@@ -210,9 +206,9 @@ public class JettyRunMojo
         server.setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", this.maxFormContentSize);
         server.setAttribute("org.eclipse.jetty.server.Request.maxFormKeys", this.maxFormKeys);
 
-        final HttpConfiguration http_config = new HttpConfiguration();
-        http_config.setRequestHeaderSize(131072);
-        final ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(http_config));
+        final HttpConfiguration httpConfig = new HttpConfiguration();
+        httpConfig.setRequestHeaderSize(131072);
+        final ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(httpConfig));
         http.setPort(this.port);
         http.setHost(this.host);
 
@@ -275,7 +271,7 @@ public class JettyRunMojo
             try {
                 if (this.logbackFile != null) {
                     final ILoggerFactory logContext = LoggerFactory.getILoggerFactory();
-                    if(logContext.getClass().getName().contains("ch.qos.logback.classic.LoggerContext")) {
+                    if (logContext.getClass().getName().contains("ch.qos.logback.classic.LoggerContext")) {
                         final Class<?> logContextInter = this.project.getClass().getClassLoader()
                                         .loadClass("ch.qos.logback.core.Context");
 
