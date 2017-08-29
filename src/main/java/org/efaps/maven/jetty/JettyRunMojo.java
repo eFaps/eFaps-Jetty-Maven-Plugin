@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2016 The eFaps Team
+ * Copyright 2003 - 2017 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -238,8 +238,7 @@ public class JettyRunMojo
                 final WicketServerApplicationConfig appConfig = new WicketServerApplicationConfig();
                 final Set<ServerEndpointConfig> seconfigs = appConfig.getEndpointConfigs(discoveredExtendedEndpoints);
 
-                if (seconfigs != null)
-                {
+                if (seconfigs != null) {
                     for (final ServerEndpointConfig seconfig : seconfigs) {
                         wscontainer.addEndpoint(seconfig);
                     }
