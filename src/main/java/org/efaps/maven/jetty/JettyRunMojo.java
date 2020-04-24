@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2017 The eFaps Team
+ * Copyright 2003 - 2020 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,8 +58,7 @@ import org.xml.sax.SAXException;
  *
  * @author The eFaps Team
  */
-@Mojo(name = "run", requiresDirectInvocation = true, defaultPhase = LifecyclePhase.INSTALL,
-                requiresDependencyResolution = ResolutionScope.RUNTIME_PLUS_SYSTEM, requiresProject = true)
+@Mojo(name = "run", requiresDirectInvocation = true, defaultPhase = LifecyclePhase.INSTALL, requiresDependencyResolution = ResolutionScope.RUNTIME_PLUS_SYSTEM, requiresProject = true)
 public class JettyRunMojo
     extends AbstractMojo
 {
@@ -79,15 +78,13 @@ public class JettyRunMojo
     private String host;
 
     /**
-     * Defines Form Limits for the Server. Default value
-     * is <i>200000</i>.
+     * Defines Form Limits for the Server. Default value is <i>200000</i>.
      */
     @Parameter(defaultValue = "200000")
     private int maxFormContentSize;
 
     /**
-     * Defines Form Limits for the Server. Default value
-     * is <i>1500</i>.
+     * Defines Form Limits for the Server. Default value is <i>1500</i>.
      */
     @Parameter(defaultValue = "1500")
     private String maxFormKeys;
@@ -149,22 +146,18 @@ public class JettyRunMojo
     /**
      * Name of the class for the transaction manager.
      */
-    @Parameter(property = "org.efaps.transaction.manager",
-                    defaultValue = "com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple",
-                    required = true)
+    @Parameter(property = "org.efaps.transaction.manager", defaultValue = "com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple", required = true)
     private String transactionManager;
 
     /**
      * Name of the class for the transaction Synchronization Registry.
      */
-    @Parameter(property = "org.efaps.transaction.synchronizationRegistry",
-           defaultValue = "com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionSynchronizationRegistryImple",
-                    required = true)
+    @Parameter(property = "org.efaps.transaction.synchronizationRegistry", defaultValue = "com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionSynchronizationRegistryImple", required = true)
     private String transactionSynchronizationRegistry;
 
     /**
      * The current Maven project.
-    */
+     */
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project;
 
@@ -182,8 +175,8 @@ public class JettyRunMojo
         final Server server = new Server();
 
         try {
-            if (this.envFile != null) {
-                final File file = new File(this.envFile);
+            if (envFile != null) {
+                final File file = new File(envFile);
                 if (file.exists()) {
                     final EnvConfiguration envConfiguration = new EnvConfiguration();
                     envConfiguration.setJettyEnvXml(file.toURI().toURL());
@@ -203,14 +196,14 @@ public class JettyRunMojo
 
         getLog().info("Starting jetty Version " + server.getClass().getPackage().getImplementationVersion());
 
-        server.setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", this.maxFormContentSize);
-        server.setAttribute("org.eclipse.jetty.server.Request.maxFormKeys", this.maxFormKeys);
+        server.setAttribute("org.eclipse.jetty.server.Request.maxFormContentSize", maxFormContentSize);
+        server.setAttribute("org.eclipse.jetty.server.Request.maxFormKeys", maxFormKeys);
 
         final HttpConfiguration httpConfig = new HttpConfiguration();
         httpConfig.setRequestHeaderSize(131072);
         final ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(httpConfig));
-        http.setPort(this.port);
-        http.setHost(this.host);
+        http.setPort(port);
+        http.setHost(host);
 
         server.addConnector(http);
 
@@ -218,22 +211,21 @@ public class JettyRunMojo
         server.setHandler(contexts);
 
         System.setProperty("java.security.auth.login.config",
-                           this.jaasConfigFile);
-        final ServerDefinition serverDef = ServerDefinition.read(this.configFile);
-        //needed as default, must be loaded ad least
+                        jaasConfigFile);
+        final ServerDefinition serverDef = ServerDefinition.read(configFile);
+        // needed as default, must be loaded ad least
         new WebAppContext();
 
         final ServletContextHandler context = new ServletContextHandler(contexts,
-                                                                        "/eFaps",
-                                                                        ServletContextHandler.SESSIONS);
+                        "/eFaps",
+                        ServletContextHandler.SESSIONS);
         serverDef.updateServer(context);
 
         try {
             if (serverDef.isWebsocket()) {
                 final Set<Class<? extends Endpoint>> discoveredExtendedEndpoints = new HashSet<>();
-
                 // Initialize javax.websocket layer
-                final ServerContainer wscontainer = WebSocketServerContainerInitializer.configureContext(context);
+                final ServerContainer wscontainer = WebSocketServerContainerInitializer.initialize(context);
 
                 final WicketServerApplicationConfig appConfig = new WicketServerApplicationConfig();
                 final Set<ServerEndpointConfig> seconfigs = appConfig.getEndpointConfigs(discoveredExtendedEndpoints);
@@ -255,8 +247,8 @@ public class JettyRunMojo
     }
 
     /**
-     * @see #convertToMap   used to convert the connection string to a property
-     *                      map
+     * @see #convertToMap used to convert the connection string to a property
+     *      map
      * @see #type
      * @see #factory
      * @see #connection
@@ -268,15 +260,15 @@ public class JettyRunMojo
         System.setProperty("ObjectStoreEnvironmentBean.localOSRoot", "eFapsStore");
         try {
             try {
-                if (this.logbackFile != null) {
+                if (logbackFile != null) {
                     final ILoggerFactory logContext = LoggerFactory.getILoggerFactory();
                     if (logContext.getClass().getName().contains("ch.qos.logback.classic.LoggerContext")) {
-                        final Class<?> logContextInter = this.project.getClass().getClassLoader()
+                        final Class<?> logContextInter = project.getClass().getClassLoader()
                                         .loadClass("ch.qos.logback.core.Context");
 
-                        final Class<?> configurator = this.project.getClass().getClassLoader()
+                        final Class<?> configurator = project.getClass().getClassLoader()
                                         .loadClass("ch.qos.logback.classic.joran.JoranConfigurator");
-                        final Object configInstance = configurator.newInstance();
+                        final Object configInstance = configurator.getConstructor().newInstance();
 
                         final Method method = configurator.getMethod("setContext", new Class[] { logContextInter });
                         method.invoke(configInstance, logContext);
@@ -284,19 +276,19 @@ public class JettyRunMojo
                         final Method reset = logContext.getClass().getMethod("reset");
                         reset.invoke(logContext);
 
-                        final Method doConfigure = configurator.getMethod("doConfigure", new Class[] { String.class});
-                        doConfigure.invoke(configInstance, this.logbackFile);
+                        final Method doConfigure = configurator.getMethod("doConfigure", new Class[] { String.class });
+                        doConfigure.invoke(configInstance, logbackFile);
                     }
                 }
             } catch (final Exception e) {
-                getLog().error("Configuration of LogBack failed.",  e);
+                getLog().error("Configuration of LogBack failed.", e);
             }
-            StartupDatabaseConnection.startup(this.type,
-                            this.factory,
-                            this.connection,
-                            this.transactionManager,
-                            this.transactionSynchronizationRegistry,
-                            this.configProps);
+            StartupDatabaseConnection.startup(type,
+                            factory,
+                            connection,
+                            transactionManager,
+                            transactionSynchronizationRegistry,
+                            configProps);
         } catch (final StartupException e) {
             getLog().error("Initialize Database Connection failed: " + e.toString());
         }
