@@ -2,7 +2,7 @@
 
 <!--
 
- Copyright 2003 - 2019 The eFaps Team
+ Copyright 2003 - 2021 The eFaps Team
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@
     ************************************************************************ -->
     <packaging>maven-plugin</packaging>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
-    <version>11.0.0-9.4-SNAPSHOT</version>
+    <version>11.0.0-10.0-SNAPSHOT</version>
     <name>eFaps Maven Jetty-plugin</name>
 
     <prerequisites>
@@ -305,7 +305,7 @@
 
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
-            <artifactId>javax-websocket-server-impl</artifactId>
+            <artifactId>websocket-javax-server</artifactId>
             <version>${jetty.version}</version>
         </dependency>
 

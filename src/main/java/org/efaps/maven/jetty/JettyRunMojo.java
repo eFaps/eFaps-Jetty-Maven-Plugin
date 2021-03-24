@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.websocket.Endpoint;
+import javax.websocket.server.ServerContainer;
 import javax.websocket.server.ServerEndpointConfig;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -43,15 +44,13 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.eclipse.jetty.websocket.jsr356.server.ServerContainer;
-import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
+import org.eclipse.jetty.websocket.javax.server.internal.JavaxWebSocketServerContainer;
 import org.efaps.init.StartupDatabaseConnection;
 import org.efaps.init.StartupException;
 import org.efaps.maven.jetty.configuration.ServerDefinition;
 import org.efaps.ui.wicket.SocketInitializer;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 /**
  * The goal starts the Jetty web server.
@@ -186,8 +185,6 @@ public class JettyRunMojo
             }
         } catch (final MalformedURLException e) {
             throw new MojoExecutionException("Could not read the Jetty env", e);
-        } catch (final SAXException e) {
-            throw new MojoExecutionException("Could not read the Jetty env", e);
         } catch (final IOException e) {
             throw new MojoExecutionException("Could not read the Jetty env", e);
         } catch (final Exception e) {
@@ -225,7 +222,7 @@ public class JettyRunMojo
             if (serverDef.isWebsocket()) {
                 final Set<Class<? extends Endpoint>> discoveredExtendedEndpoints = new HashSet<>();
                 // Initialize javax.websocket layer
-                final ServerContainer wscontainer = WebSocketServerContainerInitializer.initialize(context);
+                final ServerContainer wscontainer = JavaxWebSocketServerContainer.getContainer( context.getServletContext());
 
                 final WicketServerApplicationConfig appConfig = new WicketServerApplicationConfig();
                 final Set<ServerEndpointConfig> seconfigs = appConfig.getEndpointConfigs(discoveredExtendedEndpoints);
