@@ -25,11 +25,11 @@
     <parent>
         <groupId>org.efaps</groupId>
         <artifactId>efaps-parent</artifactId>
-        <version>11.0.0-SNAPSHOT</version>
+        <version>17.0.0-SNAPSHOT</version>
     </parent>
 
     <properties>
-        <webappVersion>[11.0.0-SNAPSHOT,11.1.0-SNAPSHOT)</webappVersion>
+        <webappVersion>[17.0.0-SNAPSHOT,17.1.0-SNAPSHOT)</webappVersion>
     </properties>
 
     <!-- ***********************************************************************
@@ -37,7 +37,7 @@
     ************************************************************************ -->
     <packaging>maven-plugin</packaging>
     <artifactId>efaps-jetty-maven-plugin</artifactId>
-    <version>11.0.0-10.0-SNAPSHOT</version>
+    <version>17.0.0-10.0-SNAPSHOT</version>
     <name>eFaps Maven Jetty-plugin</name>
 
     <prerequisites>
@@ -127,7 +127,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.7.0</version>
                 <configuration>
                     <goalPrefix>efaps-jetty</goalPrefix>
                     <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
