@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2016 The eFaps Team
+ * Copyright 2003 - 2023 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 
 package org.efaps.maven.jetty.configuration;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -30,7 +29,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
+
 
 /**
  * @author The eFaps Team
@@ -46,12 +45,12 @@ public class ServerDefinition
     /**
      * List of all Filters used in this server definition.
      */
-    private final List<FilterDefinition> filters = new ArrayList<FilterDefinition>();
+    private final List<FilterDefinition> filters = new ArrayList<>();
 
     /**
      * List of all servlets used in this server definition.
      */
-    private final List<ServletDefinition> servlets = new ArrayList<ServletDefinition>();
+    private final List<ServletDefinition> servlets = new ArrayList<>();
 
     /**
      * Use websocket or not.
@@ -105,10 +104,8 @@ public class ServerDefinition
             final Digester digester = loader.newDigester();
             ret = (ServerDefinition) digester.parse(_url);
 
-        } catch (final IOException e) {
+        } catch (final Exception e) {
             ServerDefinition.LOG.error(_url.toString() + " is not readable", e);
-        } catch (final SAXException e) {
-            ServerDefinition.LOG.error(_url.toString() + " seems to be invalide XML", e);
         }
         return ret;
     }
